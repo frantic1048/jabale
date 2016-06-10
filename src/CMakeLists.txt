@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(jabale)
+find_package(FLEX)
 
-add_executable(${PROJECT_NAME} main.c)
+FILE(GLOB LEXER_FILES
+  lexer.l
+)
 
-include(CTest)
+FLEX_TARGET(JabaleLexer ${LEXER_FILES} ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
 
-add_test(Runs ${PROJECT_NAME})
-
-# Failed case
-add_test(Jabaleha ${PROJECT_NAME})
-set_tests_properties (Jabaleha
-  PROPERTIES PASS_REGULAR_EXPRESSION "Jabale!\n")
+add_executable(JabaleLexer
+  ${FLEX_JabaleLexer_OUTPUTS}
+)

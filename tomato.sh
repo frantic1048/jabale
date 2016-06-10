@@ -10,50 +10,53 @@ function tomato_help() {
   echo "  tdd      continous build && testing"
   echo "Dependencies:"
   echo "  - inotify-tools"
-  echo "  - frantic1048/ctest-chalk"
+  echo "  - bats"
 }
 
 function tomato_build() {
-  mkdir -p build;
-  cd build;
-  cmake ../src/ && make;
-  cd ..;
+  mkdir -p build
+  cd build
+  cmake ../src/ && make
+  cd ..
 }
 
 function tomato_clean() {
-  rm -rf ./build/;
+  rm -rf ./build/
 }
 
 function tomato_test() {
-  cd build;
-  ctest | ctest-chalk;
-  cd ..;
+  cd build
+  bats ../test/
+  cd ..
 }
 
 function tomato_tdd() {
-  cd build;
-  inotifywait -mqe CLOSE_WRITE ../src/ | tee /dev/tty | while read ; do cmake ../src/ && make && ctest | ctest-chalk ; done;
-  cd ..;
+  cd build
+  inotifywait -mqe CLOSE_WRITE ../src/ | tee /dev/tty |
+    while read ;
+    do cmake ../src/ && make && bats ../test/ ;
+    done;
+  cd ..
 }
 
-if [[ -z $1 ]];
+if [[ -z $1 ]]
 then
-  tomato_help;
+  tomato_help
 elif [[ $1 == "help" ]]
 then
-  tomato_help;
+  tomato_help
 elif [[ $1 == "build" ]]
 then
-  tomato_build;
+  tomato_build
 elif [[ $1 == "clean" ]]
 then
-  tomato_clean;
+  tomato_clean
 elif [[ $1 == "test" ]]
 then
-  tomato_test;
+  tomato_test
 elif [[ $1 == "tdd" ]]
 then
-  tomato_build;
-  tomato_test;
-  tomato_tdd;
+  tomato_build
+  tomato_test
+  tomato_tdd
 fi
