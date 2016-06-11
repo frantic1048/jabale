@@ -5,8 +5,11 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 
-# tdd building directory
+# building directory
 /build
 
 # dolphin
 .directory
+
+# node
+/node_modules
