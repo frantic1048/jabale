@@ -38,6 +38,14 @@ describe('Lexer', () => {
     });
   });
 
+  describe('0x102 BLANK', () => {
+    ['\n', ' '].forEach(k => {
+      it(`${k}`, (done) => {
+        lexerMatch(k, `0x102 BLANK\n`, done);
+      });
+    });
+  });
+
   describe('0x103 KEYWORD', () => {
     ['abstract', 'boolean', 'break', 'byte',
     'case', 'catch', 'char', 'class',
@@ -66,8 +74,11 @@ describe('Lexer', () => {
     });
   });
 
-  xdescribe('0x106 CHAR', () => {
-    ["'z'"].forEach(k => {
+  describe('0x106 CHAR', () => {
+    ["'z'", "','", "'\\2'", "'\\23'", "'\\233'",
+    "'\\u1'", "'\\u1a'", "'\\u1ae'", "'\\u1aef'",
+    "'\\''", "'\\r'", "'\\n'", "'\\f'",
+    "'\\t'", "'\\b'"].forEach(k => {
       it(`${k}`, (done) => {
         lexerMatch(k, `0x106 CHAR ${k}\n`, done);
       });
@@ -89,6 +100,17 @@ describe('Lexer', () => {
     '123.0', '123e3', '123E3', '12.3F', '12.3f'].forEach(k => {
       it(`${k}`, (done) => {
         lexerMatch(k, `0x108 FLOAT ${k}\n`, done);
+      });
+    });
+  });
+
+  describe('0x109 STRING', () => {
+    ['""', '"a"', '"\\2"', '"\\23"', '"\\233"',
+    '"\\u1"', '"\\u1a"', '"\\u1ae"', '"\\u1aef"',
+    '"\\\'"', '"\\r"', '"\\n"', '"\\f"',
+    '"\\t"', '"\\b"'].forEach(k => {
+      it(`${k}`, (done) => {
+        lexerMatch(k, `0x109 STRING ${k}\n`, done);
       });
     });
   });

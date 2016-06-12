@@ -1,5 +1,11 @@
 DIGIT [0-9]
-HEXDIGIT [0-9abcde]
+OCTDIGIT [0-7]
+HEXDIGIT [0-9abcdef]
+BOOL true|false
+KEYWORD abstract|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while|true|false
+INT -?{DIGIT}+L?|-?0x{HEXDIGIT}+L?
+FLOAT -?{DIGIT}+"."{DIGIT}*[Ff]?|-?{DIGIT}*"."{DIGIT}+[Ff]?|-?{DIGIT}+[Ee]-?{DIGIT}+|-?{DIGIT}+"."{DIGIT}*[Ee]-?{DIGIT}+|-?{DIGIT}*"."{DIGIT}+[Ee]-?{DIGIT}+
+CHAR [[:alnum:][:print:]]|\\{OCTDIGIT}{1,3}|\\u{HEXDIGIT}{1,4}|\\[\\'rnftb]
 %%
 "/*" {
   int c;
@@ -29,23 +35,34 @@ HEXDIGIT [0-9abcde]
   printf("0x101 COMMENT\n");
 }
 
-true|false {
+'{CHAR}' {
+  printf("0x106 CHAR %s\n", yytext);
+}
+
+\"{CHAR}*\" {
+  printf("0x109 STRING %s\n", yytext);
+}
+
+{BOOL} {
   printf("0x105 BOOL %s\n", yytext);
 }
 
-abstract|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while {
+{KEYWORD} {
   printf("0x103 KEYWORD %s\n", yytext);
 }
 
--?{DIGIT}+"."{DIGIT}*[Ff]?|-?{DIGIT}*"."{DIGIT}+[Ff]?|-?{DIGIT}+[Ee]-?{DIGIT}+|-?{DIGIT}+"."{DIGIT}*[Ee]-?{DIGIT}+|-?{DIGIT}*"."{DIGIT}+[Ee]-?{DIGIT}+ {
+{FLOAT} {
   printf("0x108 FLOAT %s\n", yytext);
 }
 
--?{DIGIT}+L?|-?0x{HEXDIGIT}+L? {
+{INT} {
   printf("0x107 INT %s\n", yytext);
 }
 
-\n {} /* newline */
+[\n ]* {
+  printf("0x102 BLANK\n");
+}
+
 . {} /* For others, do nothing */
 %%
 
