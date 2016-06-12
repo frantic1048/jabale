@@ -9,6 +9,7 @@
   "scripts": {
     "prepare": "mkdir -p build",
     "test": "./node_modules/.bin/mocha -c -R dot -t 5213 --compilers js:babel-register",
+    "testreport": "./node_modules/.bin/mocha -c -R Doc -t 5213 --compilers js:babel-register",
     "ci": "./node_modules/.bin/mocha -c -t 5213 --compilers js:babel-register",
     "prebdd": "npm test || true",
     "bdd": "./node_modules/.bin/chokidar \"test/*.js\" \"src/*.{c,l,txt}\" -c \"npm test\"",

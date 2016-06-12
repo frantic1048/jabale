@@ -31,7 +31,7 @@ describe('Lexer', () => {
   describe('0x100 BADTOKEN', () => {
     ['@', '`', '#'].forEach(k => {
       it(`${k}`, (done) => {
-        lexerMatch(k, `0x100 BADTOKEN\n`, done);
+        lexerMatch(k, `0x100 BADTOKEN at line:1 ${k}\n`, done);
       });
     });
   });

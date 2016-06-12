@@ -154,7 +154,7 @@ SEMICOLON ;
 }
 
 . {
-  printf("0x100 BADTOKEN\n");
+  printf("0x100 BADTOKEN at line:%d %s\n", yylineno, yytext);
 }
 %%
 
