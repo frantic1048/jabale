@@ -2,7 +2,7 @@ import { spawn, execSync } from 'child_process';
 import path from 'path';
 import { expect } from 'chai';
 
-const LEXER = path.join(__dirname, '../build/JabaleLexer');
+const LEXER = path.join(__dirname, '../build/Lexer');
 
 function match(target, input, expectedOutput, done) {
   const p = spawn(`${target}`);

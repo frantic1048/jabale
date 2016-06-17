@@ -6,8 +6,8 @@ FILE(GLOB LEXER_FILES
   lexer.l
 )
 
-FLEX_TARGET(JabaleLexer ${LEXER_FILES} ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
+FLEX_TARGET(Lexer ${LEXER_FILES} ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
 
-add_executable(JabaleLexer
-  ${FLEX_JabaleLexer_OUTPUTS}
+add_executable(Lexer
+  ${FLEX_Lexer_OUTPUTS}
 )
