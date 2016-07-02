@@ -1,0 +1,30 @@
+#pragma once
+
+#define COMMENT 0x101
+#define COMMENT 0x101
+#define FLOAT 0x108
+#define INT 0x107
+#define ASSIGN 0x110
+#define COND 0x111
+#define BOOLOR 0x112
+#define BOOLAND 0x113
+#define BITOR 0x114
+#define BITXOR 0x115
+#define BITAND 0x116
+#define EQUAL 0x117
+#define ORDER 0x118
+#define BITSHIFT 0x119
+#define ARITH1 0x11a
+#define ARITH2 0x11b
+#define MONOARG 0x11c
+#define EDGE 0x11d
+#define COMMA 0x120
+#define BRACE 0x121
+#define SEMICOLON 0x122
+#define CHAR 0x106
+#define STRING 0x109
+#define BOOL 0x105
+#define KEYWORD 0x103
+#define IDENTIFIER 0x104
+#define BLANK 0x102
+#define BADTOKEN 0x100
