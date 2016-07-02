@@ -36,7 +36,7 @@ describe('Lexer', () => {
     });
   });
 
-  describe('0x101 COMMENT', () => {
+  xdescribe('0x101 COMMENT', () => {
     ['// Karada wa tsurugi dekiteiru',
     '/* I am the bone of my sword. */',
     '/* Steel is my body \n and fire is my blood */'].forEach(k => {
@@ -46,7 +46,7 @@ describe('Lexer', () => {
     });
   });
 
-  describe('0x102 BLANK', () => {
+  xdescribe('0x102 BLANK', () => {
     ['\n', ' '].forEach(k => {
       it(`${k.replace('\n', '\\n')}`, (done) => {
         lexerMatch(k, `0x102 BLANK\n`, done);

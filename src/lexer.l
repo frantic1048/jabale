@@ -46,11 +46,11 @@ SEMICOLON ;
     }
   }
 
-  printf("0x101 COMMENT\n");
+  /*printf("0x101 COMMENT\n");*/
 }
 
 "//".* {
-  printf("0x101 COMMENT\n");
+  /*printf("0x101 COMMENT\n");*/
 }
 
 {FLOAT} {
@@ -150,7 +150,7 @@ SEMICOLON ;
 }
 
 [\n ]* {
-  printf("0x102 BLANK\n");
+  /*printf("0x102 BLANK\n");*/
 }
 
 . {
