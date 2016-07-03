@@ -26,6 +26,7 @@ set_target_properties(Lexer PROPERTIES
   COMPILE_FLAGS -DFFF_LEXER)
 
 # add_executable(Parser
+#   token.h
 #   ${FLEX_Lexer_OUTPUTS}
 #   ${BISON_Parser_OUTPUTS}
 # )
