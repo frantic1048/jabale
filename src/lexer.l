@@ -1,6 +1,10 @@
 %{
+#ifdef FFF_LEXER
 #include "token.h"
+#endif
+
 #ifdef FFF_PARSER
+#include "parser.h"
 #define MATCH(_str, _res) if (0 == strcmp(yytext, (_str))) return (_res);
 #endif
 %}
@@ -53,44 +57,35 @@ SEMICOLON ;
   }
 
 #ifdef FFF_LEXER
-  printf("0x%x COMMENT\n", COMMENT);
-#endif
-#ifdef FFF_PARSER
-return COMMENT;
+  printf("0x%x COMMENT\n", TOK_COMMENT);
 #endif
 }
 
 "//".* {
 #ifdef FFF_LEXER
-  printf("0x%x COMMENT\n", COMMENT);
-#endif
-#ifdef FFF_PARSER
-return COMMENT;
+  printf("0x%x COMMENT\n", TOK_COMMENT);
 #endif
 }
 
 {FLOAT} {
 #ifdef FFF_LEXER
-  printf("0x%x FLOAT %s\n", FLOAT, yytext);
-#endif
-#ifdef FFF_PARSER
-return FLOAT;
+  printf("0x%x FLOAT %s\n", TOK_FLOAT, yytext);
 #endif
 }
 
 {INT} {
 #ifdef FFF_LEXER
-  printf("0x%x INT %s\n", INT, yytext);
+  printf("0x%x INT %s\n", TOK_INT, yytext);
 #endif
 #ifdef FFF_PARSER
-yylval=atoi(yytext);
+yylval.string=strdup(yytext);
 return INT;
 #endif
 }
 
 {ASSIGN} {
 #ifdef FFF_LEXER
-  printf("0x%x ASSIGN %s\n", ASSIGN, yytext);
+  printf("0x%x ASSIGN %s\n", TOK_ASSIGN, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH("=", ASSIGN_NORMAL)
@@ -99,70 +94,49 @@ MATCH("=", ASSIGN_NORMAL)
 
 {COND} {
 #ifdef FFF_LEXER
-  printf("0x%x COND %s\n", COND, yytext);
-#endif
-#ifdef FFF_PARSER
-return COND;
+  printf("0x%x COND %s\n", TOK_COND, yytext);
 #endif
 }
 
 {BOOLOR} {
 #ifdef FFF_LEXER
-  printf("0x%x BOOLOR %s\n", BOOLOR, yytext);
-#endif
-#ifdef FFF_PARSER
-return BOOLOR;
+  printf("0x%x BOOLOR %s\n", TOK_BOOLOR, yytext);
 #endif
 }
 
 {BOOLAND} {
 #ifdef FFF_LEXER
-  printf("0x%x BOOLAND %s\n", BOOLAND, yytext);
-#endif
-#ifdef FFF_PARSER
-return BOOLAND;
+  printf("0x%x BOOLAND %s\n", TOK_BOOLAND, yytext);
 #endif
 }
 
 {BITOR} {
 #ifdef FFF_LEXER
-  printf("0x%x BITOR %s\n", BITOR, yytext);
-#endif
-#ifdef FFF_PARSER
-return BITOR;
+  printf("0x%x BITOR %s\n", TOK_BITOR, yytext);
 #endif
 }
 
 {BITXOR} {
 #ifdef FFF_LEXER
-  printf("0x%x BITXOR %s\n", BITXOR, yytext);
-#endif
-#ifdef FFF_PARSER
-return BITXOR;
+  printf("0x%x BITXOR %s\n", TOK_BITXOR, yytext);
 #endif
 }
 
 {BITAND} {
 #ifdef FFF_LEXER
-  printf("0x%x BITAND %s\n", BITAND, yytext);
-#endif
-#ifdef FFF_PARSER
-return BITAND;
+  printf("0x%x BITAND %s\n", TOK_BITAND, yytext);
 #endif
 }
 
 {EQUAL} {
 #ifdef FFF_LEXER
-  printf("0x%x EQUAL %s\n", EQUAL, yytext);
-#endif
-#ifdef FFF_PARSER
-return EQUAL;
+  printf("0x%x EQUAL %s\n", TOK_EQUAL, yytext);
 #endif
 }
 
 {ORDER} {
 #ifdef FFF_LEXER
-  printf("0x%x ORDER %s\n", ORDER, yytext);
+  printf("0x%x ORDER %s\n", TOK_ORDER, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH(">", ORDER_BT)
@@ -172,16 +146,13 @@ MATCH("<", ORDER_LT)
 
 {BITSHIFT} {
 #ifdef FFF_LEXER
-  printf("0x%x BITSHIFT %s\n", BITSHIFT, yytext);
-#endif
-#ifdef FFF_PARSER
-return BITSHIFT;
+  printf("0x%x BITSHIFT %s\n", TOK_BITSHIFT, yytext);
 #endif
 }
 
 {ARITH1} {
 #ifdef FFF_LEXER
-  printf("0x%x ARITH1 %s\n", ARITH1, yytext);
+  printf("0x%x ARITH1 %s\n", TOK_ARITH1, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH("+", ARITH1_PLUS)
@@ -191,7 +162,7 @@ MATCH("-", ARITH1_MINUS)
 
 {ARITH2} {
 #ifdef FFF_LEXER
-  printf("0x%x ARITH2 %s\n", ARITH2, yytext);
+  printf("0x%x ARITH2 %s\n", TOK_ARITH2, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH("*", ARITH2_MUL)
@@ -201,16 +172,13 @@ MATCH("/", ARITH2_DIV)
 
 {MONOARG} {
 #ifdef FFF_LEXER
-  printf("0x%x MONOARG %s\n", MONOARG, yytext);
-#endif
-#ifdef FFF_PARSER
-return MONOARG;
+  printf("0x%x MONOARG %s\n", TOK_MONOARG, yytext);
 #endif
 }
 
 {EDGE} {
 #ifdef FFF_LEXER
-  printf("0x%x EDGE %s\n", EDGE, yytext);
+  printf("0x%x EDGE %s\n", TOK_EDGE, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH("(", EDGE_OPAREN)
@@ -220,25 +188,19 @@ MATCH(")", EDGE_EPAREN)
 
 {COMMA} {
 #ifdef FFF_LEXER
-  printf("0x%x COMMA %s\n", COMMA, yytext);
-#endif
-#ifdef FFF_PARSER
-return COMMA;
+  printf("0x%x COMMA %s\n", TOK_COMMA, yytext);
 #endif
 }
 
 {BRACE} {
 #ifdef FFF_LEXER
-  printf("0x%x BRACE %s\n", BRACE, yytext);
-#endif
-#ifdef FFF_PARSER
-return BRACE;
+  printf("0x%x BRACE %s\n", TOK_BRACE, yytext);
 #endif
 }
 
 {SEMICOLON} {
 #ifdef FFF_LEXER
-  printf("0x%x SEMICOLON %s\n", SEMICOLON, yytext);
+  printf("0x%x SEMICOLON %s\n", TOK_SEMICOLON, yytext);
 #endif
 #ifdef FFF_PARSER
 return SEMICOLON;
@@ -247,34 +209,25 @@ return SEMICOLON;
 
 '{CHAR}' {
 #ifdef FFF_LEXER
-  printf("0x%x CHAR %s\n", CHAR, yytext);
-#endif
-#ifdef FFF_PARSER
-return CHAR;
+  printf("0x%x CHAR %s\n", TOK_CHAR, yytext);
 #endif
 }
 
 \"{CHAR}*\" {
 #ifdef FFF_LEXER
-  printf("0x%x STRING %s\n", STRING, yytext);
-#endif
-#ifdef FFF_PARSER
-return STRING;
+  printf("0x%x STRING %s\n", TOK_STRING, yytext);
 #endif
 }
 
 {BOOL} {
 #ifdef FFF_LEXER
-  printf("0x%x BOOL %s\n", BOOL, yytext);
-#endif
-#ifdef FFF_PARSER
-return BOOL;
+  printf("0x%x BOOL %s\n", TOK_BOOL, yytext);
 #endif
 }
 
 {KEYWORD} {
 #ifdef FFF_LEXER
-  printf("0x%x KEYWORD %s\n", KEYWORD, yytext);
+  printf("0x%x KEYWORD %s\n", TOK_KEYWORD, yytext);
 #endif
 #ifdef FFF_PARSER
 MATCH("while", KEYWORD_WHILE)
@@ -283,34 +236,28 @@ MATCH("while", KEYWORD_WHILE)
 
 {IDENTIFIER} {
 #ifdef FFF_LEXER
-  printf("0x%x IDENTIFIER %s\n", IDENTIFIER, yytext);
+  printf("0x%x IDENTIFIER %s\n", TOK_IDENTIFIER, yytext);
 #endif
 #ifdef FFF_PARSER
-yyval=strdup(yytext);
+yylval.string=strdup(yytext);
 return IDENTIFIER;
 #endif
 }
 
 [\n ]* {
 #ifdef FFF_LEXER
-  printf("0x%x BLANK\n", BLANK);
-#endif
-#ifdef FFF_PARSER
-return BLANK;
+  printf("0x%x BLANK\n", TOK_BLANK);
 #endif
 }
 
 . {
 #ifdef FFF_LEXER
-  printf("0x%x BADTOKEN at line:%d %s\n", BADTOKEN, yylineno, yytext);
-#endif
-#ifdef FFF_PARSER
-yyval=strdup(yytext);
-return BADTOKEN;
+  printf("0x%x BADTOKEN at line:%d %s\n", TOK_BADTOKEN, yylineno, yytext);
 #endif
 }
 %%
 
+#ifdef FFF_LEXER
 void main(int argc, char **argv) {
   ++argv, --argc; /* skip program name */
   if (argc > 0) {
@@ -324,3 +271,4 @@ void main(int argc, char **argv) {
 int yywrap(){
     return 1;
 }
+#endif
